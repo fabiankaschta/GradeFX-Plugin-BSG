@@ -45,6 +45,7 @@
 		</dependency>
     </dependencies>
     <build>
+		<finalName>${project.artifactId}-v${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -70,6 +71,7 @@
             	<artifactId>maven-jar-plugin</artifactId>
                 <version>${jar.plugin.version}</version>
 				<configuration>
+					
 					<archive>
                         <manifestEntries>
 						    <Plugin-Class>org.openjfx.gradefx.plugin.bsg.BSGPlugin</Plugin-Class>
