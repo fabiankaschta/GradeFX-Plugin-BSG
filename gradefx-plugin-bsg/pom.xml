@@ -3,16 +3,16 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openjfx.gradefx.plugin</groupId>
     <artifactId>bsg</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>24</maven.compiler.release>
-        <javafx.version>24</javafx.version>
+        <maven.compiler.release>25</maven.compiler.release>
+        <javafx.version>25</javafx.version>
         <gradefx.version>1.2.6</gradefx.version>
         <pdfbox.version>3.0.5</pdfbox.version>
-        <compiler.plugin.version>3.14.0</compiler.plugin.version>
+        <compiler.plugin.version>3.14.1</compiler.plugin.version>
         <resources.plugin.version>3.3.1</resources.plugin.version>
         <jar.plugin.version>3.4.2</jar.plugin.version>
     </properties>
