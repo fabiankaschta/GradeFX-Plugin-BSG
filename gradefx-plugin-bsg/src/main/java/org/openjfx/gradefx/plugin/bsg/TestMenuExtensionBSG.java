@@ -18,6 +18,7 @@ import org.openjfx.gradefx.view.menu.TestMenu.TestMenuExtensionPoint;
 import org.openjfx.gradefx.view.pane.GroupsPane;
 import org.openjfx.kafx.controller.ConfigController;
 import org.openjfx.kafx.controller.ExceptionController;
+import org.openjfx.kafx.controller.LogController;
 import org.openjfx.kafx.controller.TranslationController;
 import org.openjfx.kafx.view.converter.BigDecimalConverter;
 import org.pf4j.Extension;
@@ -55,31 +56,39 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 
 	private void export(File output, Group group, Test test) {
 		try {
+			LogController.log(LogController.DEBUG, "creating pdf wrapper");
 			PDDocument document;
 			PDAcroForm acroForm;
 			PDField[] fields;
 			switch (group.getGradeSystem()) {
 			case ONE_TO_SIX:
+				LogController.log(LogController.DEBUG, "loading BSG-Umschlag.pdf");
 				document = Loader.loadPDF(new RandomAccessReadBuffer(TestMenuExtensionBSG.class
 						.getResourceAsStream("/org/openjfx/gradefx/plugin/bsg/pdf/BSG-Umschlag.pdf")));
+				LogController.log(LogController.DEBUG, "pdf loaded (BSG-Umschlag.pdf)");
 				acroForm = document.getDocumentCatalog().getAcroForm();
 				fields = acroForm.getFields().toArray(n -> new PDField[n]);
 				this.setValuesOneToSix(fields, group, test);
+				LogController.log(LogController.DEBUG, "pdf filled (BSG-Umschlag.pdf");
 				break;
 			case FIFTEEN_POINTS:
+				LogController.log(LogController.DEBUG, "loading BSG-Umschlag-Oberstufe.pdf");
 				document = Loader.loadPDF(new RandomAccessReadBuffer(TestMenuExtensionBSG.class
 						.getResourceAsStream("/org/openjfx/gradefx/plugin/bsg/pdf/BSG-Umschlag-Oberstufe.pdf")));
+				LogController.log(LogController.DEBUG, "pdf loaded (BSG-Umschlag-Oberstufe.pdf)");
 				acroForm = document.getDocumentCatalog().getAcroForm();
 				fields = acroForm.getFields().toArray(n -> new PDField[n]);
 				this.setValuesFifteenPoints(fields, group, test);
+				LogController.log(LogController.DEBUG, "pdf filled (BSG-Umschlag-Oberstufe.pdf");
 				break;
 			default:
 				throw new IllegalArgumentException("unknown grade system: " + group.getGradeSystem());
 			}
 			document.save(output);
 			document.close();
-		} catch (Exception e) {
-			ExceptionController.exception(e);
+			LogController.log(LogController.DEBUG, "pdf exported");
+		} catch (Throwable t) {
+			ExceptionController.exception(t);
 		}
 	}
 
