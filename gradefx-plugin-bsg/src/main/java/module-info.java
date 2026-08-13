@@ -3,4 +3,5 @@ module org.openjfx.gradefx.plugin.bsg {
 	requires java.logging;
 	requires org.openjfx.gradefx;
 	requires org.apache.pdfbox.io;
+	requires org.apache.commons.logging;
 }
