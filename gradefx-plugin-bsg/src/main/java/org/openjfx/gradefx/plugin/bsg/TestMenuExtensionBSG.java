@@ -35,7 +35,7 @@ import org.openjfx.kafx.controller.ConfigController;
 import org.openjfx.kafx.controller.ExceptionController;
 import org.openjfx.kafx.controller.LogController;
 import org.openjfx.kafx.controller.TranslationController;
-import org.openjfx.kafx.view.converter.BigDecimalConverter;
+import org.openjfx.kafx.converter.BigDecimalConverter;
 import org.pf4j.Extension;
 
 import javafx.scene.control.MenuItem;
