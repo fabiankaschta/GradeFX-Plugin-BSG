@@ -24,13 +24,13 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
+import org.openjfx.gradefx.controller.GradeFXController;
 import org.openjfx.gradefx.model.Grade;
 import org.openjfx.gradefx.model.Group;
 import org.openjfx.gradefx.model.Student;
 import org.openjfx.gradefx.model.Test;
 import org.openjfx.gradefx.view.menu.TestMenu;
 import org.openjfx.gradefx.view.menu.TestMenu.TestMenuExtensionPoint;
-import org.openjfx.gradefx.view.pane.GroupsPane;
 import org.openjfx.kafx.controller.ConfigController;
 import org.openjfx.kafx.controller.ExceptionController;
 import org.openjfx.kafx.controller.LogController;
@@ -62,7 +62,7 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 			fileChooser.getExtensionFilters().add(new ExtensionFilter("PDF", "*.pdf"));
 			File file = fileChooser.showSaveDialog(testMenu.getParentPopup());
 			if (file != null) {
-				export(file, GroupsPane.getSelectedGroup(), GroupsPane.getSelectedTest());
+				export(file, GradeFXController.getSelectedGroup(), GradeFXController.getSelectedTest());
 			}
 		});
 
