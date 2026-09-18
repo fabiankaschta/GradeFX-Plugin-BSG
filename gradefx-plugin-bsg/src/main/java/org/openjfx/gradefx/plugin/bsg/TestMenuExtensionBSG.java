@@ -66,6 +66,7 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 			}
 		});
 
+		menuItemExportBSG.disableProperty().bind(GradeFXController.selectedTestProperty().isNull());
 		testMenu.getItems().add(menuItemExportBSG);
 	}
 
@@ -334,7 +335,7 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 		fields[3].setValue(dateConverter.toString(test.getDate()));
 		fields[11].setValue(String.valueOf(group.getSubject().getName()));
 		fields[12].setValue(String.valueOf(group.getStudents().size()));
-		
+
 		int amount = 0;
 		int[] grades = new int[16];
 		BigDecimal sumBigDecimal = BigDecimal.ZERO;
@@ -355,7 +356,7 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 		fields[13].setValue(String.valueOf(amount));
 		fields[30].setValue(String.valueOf(amount));
 		BigDecimal amountBigDecimal = BigDecimal.valueOf(amount);
-		
+
 		BigDecimalConverter converter = new BigDecimalConverter();
 		converter.getDecimalFormat().setMinimumFractionDigits(2);
 		converter.getDecimalFormat().setMaximumFractionDigits(2);

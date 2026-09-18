@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openjfx.gradefx.plugin</groupId>
     <artifactId>bsg</artifactId>
-    <version>2.0</version>
+    <version>2.1</version>
     <url>https://github.com/fabiankaschta/GradeFX-Plugin-BSG/releases/latest</url>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<packaging>jar</packaging>
