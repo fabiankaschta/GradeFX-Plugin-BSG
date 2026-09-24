@@ -66,8 +66,8 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 			}
 		});
 
-		menuItemExportBSG.disableProperty().bind(GradeFXController.selectedTestProperty().isNull());
 		testMenu.getItems().add(menuItemExportBSG);
+		menuItemExportBSG.disableProperty().bind(GradeFXController.selectedTestProperty().isNull());
 	}
 
 	private void export(File output, Group group, Test test) {
