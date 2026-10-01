@@ -26,6 +26,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
 import org.openjfx.gradefx.controller.GradeFXController;
 import org.openjfx.gradefx.model.Grade;
+import org.openjfx.gradefx.model.GradeSystem.GradeSystemBaseType;
 import org.openjfx.gradefx.model.Group;
 import org.openjfx.gradefx.model.Student;
 import org.openjfx.gradefx.model.Test;
@@ -171,8 +172,6 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 		fields[4].setValue(test.getName().replaceAll("\\D+", ""));
 		fields[5].setValue(String.valueOf(group.getSubject().getName()));
 
-		int amount = 0;
-		int[] grades = new int[6];
 		StringBuilder annotationBuilder = new StringBuilder();
 		for (Student student : group.getStudents()) {
 			String annotation = test.getAnnotation(student);
@@ -195,13 +194,6 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 				}
 				annotationBuilder.append('\n');
 			}
-			if (!test.isOnlyDefaultDate() || date == null || date.equals(test.getDate())) {
-				Grade grade = test.getGrade(student);
-				if (grade != null) {
-					amount++;
-					grades[grade.getNumericalValue() - 1]++;
-				}
-			}
 		}
 		fields[6].setValue(annotationBuilder.toString());
 
@@ -211,25 +203,25 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 
 		fields[10].setValue(dateConverter.toString(test.getDate()));
 
-		fields[15].setValue(String.valueOf(amount));
-		fields[16].setValue(String.valueOf(grades[0]));
-		fields[17].setValue(String.valueOf(grades[1]));
-		fields[18].setValue(String.valueOf(grades[2]));
-		fields[19].setValue(String.valueOf(grades[3]));
-		fields[20].setValue(String.valueOf(grades[4]));
-		fields[21].setValue(String.valueOf(grades[5]));
-		if (amount != 0) {
-			BigDecimal amountBigDecimal = BigDecimal.valueOf(amount);
-			BigDecimal sumBigDecimal = BigDecimal
-					.valueOf(grades[0] * 1 + grades[1] * 2 + grades[2] * 3 + grades[3] * 4 + grades[4] * 5 + grades[5] * 6);
-			BigDecimalConverter converter = new BigDecimalConverter();
-			converter.getDecimalFormat().setMinimumFractionDigits(2);
-			converter.getDecimalFormat().setMaximumFractionDigits(2);
-			converter.getDecimalFormat().setRoundingMode(RoundingMode.DOWN);
-			fields[22].setValue(converter.toString(sumBigDecimal.divide(amountBigDecimal, 7, RoundingMode.DOWN)));
-			converter.getDecimalFormat().setRoundingMode(RoundingMode.HALF_UP);
-			fields[23].setValue(converter.toString(
-					BigDecimal.valueOf(100 * (grades[4] + grades[5])).divide(amountBigDecimal, 7, RoundingMode.HALF_UP)));
+		fields[15].setValue(String.valueOf(test.getGradedAmountRespectingDate()));
+
+		Grade[] grades = group.getGradeSystem().getPossibleGradesDESC();
+		for (int i = 0; i < 6; i++) {
+			fields[16 + i].setValue(String.valueOf(test.getGradeAmountRespectingDate(grades[i])));
+		}
+
+		BigDecimalConverter converter = new BigDecimalConverter();
+		converter.getDecimalFormat().setMinimumFractionDigits(2);
+		converter.getDecimalFormat().setMaximumFractionDigits(2);
+		converter.getDecimalFormat().setRoundingMode(RoundingMode.DOWN);
+		BigDecimal avgGrade = test.getAvgGradeRespectingDate();
+		if (avgGrade != null) {
+			fields[22].setValue(converter.toString(avgGrade));
+		}
+		BigDecimal criticalGradesRatio = test.getCriticalGradesRatioRespectingDate();
+		converter.getDecimalFormat().setRoundingMode(RoundingMode.HALF_UP);
+		if (criticalGradesRatio != null) {
+			fields[23].setValue(converter.toString(criticalGradesRatio.multiply(BigDecimal.valueOf(100))));
 		}
 
 		final String fullPattern = "SA/KA/Stgr.A/Test/Andere";
@@ -338,42 +330,30 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 		fields[11].setValue(String.valueOf(group.getSubject().getName()));
 		fields[12].setValue(String.valueOf(group.getStudents().size()));
 
-		int amount = 0;
-		int[] grades = new int[16];
-		BigDecimal sumBigDecimal = BigDecimal.ZERO;
-		for (Student student : group.getStudents()) {
-			LocalDate date = test.getDate(student);
-			if (!test.isOnlyDefaultDate() || date == null || date.equals(test.getDate())) {
-				Grade grade = test.getGrade(student);
-				if (grade != null) {
-					amount++;
-					grades[grade.getNumericalValue()]++;
-				}
-			}
-		}
+		Grade[] grades = group.getGradeSystem().getPossibleGradesDESC();
 		for (int i = 0; i < 16; i++) {
-			fields[14 + 15 - i].setValue(String.valueOf(grades[i]));
-			sumBigDecimal = sumBigDecimal.add(BigDecimal.valueOf(grades[i] * i));
+			fields[14 + i].setValue(String.valueOf(test.getGradeAmountRespectingDate(grades[i])));
 		}
-		fields[13].setValue(String.valueOf(amount));
-		fields[30].setValue(String.valueOf(amount));
-		if (amount != 0) {
-			BigDecimal amountBigDecimal = BigDecimal.valueOf(amount);
 
-			BigDecimalConverter converter = new BigDecimalConverter();
-			converter.getDecimalFormat().setMinimumFractionDigits(2);
-			converter.getDecimalFormat().setMaximumFractionDigits(2);
-			converter.getDecimalFormat().setRoundingMode(RoundingMode.DOWN);
-			BigDecimal avgPoints = sumBigDecimal.divide(amountBigDecimal, 7, RoundingMode.DOWN);
-			BigDecimal avgGrade = BigDecimal.valueOf(17).subtract(avgPoints).divide(BigDecimal.valueOf(3), 7,
-					RoundingMode.DOWN);
+		fields[13].setValue(String.valueOf(test.getGradedAmountRespectingDate()));
+		fields[30].setValue(String.valueOf(test.getGradedAmountRespectingDate()));
+
+		BigDecimalConverter converter = new BigDecimalConverter();
+		converter.getDecimalFormat().setMinimumFractionDigits(2);
+		converter.getDecimalFormat().setMaximumFractionDigits(2);
+		converter.getDecimalFormat().setRoundingMode(RoundingMode.DOWN);
+
+		BigDecimal avgGradePoints = test.getAvgGrade();
+		if (avgGradePoints != null) {
+			BigDecimal avgGrade = group.getGradeSystem().mapAvgToOther(avgGradePoints, GradeSystemBaseType.ONE_TO_SIX);
 			fields[31].setValue(converter.toString(avgGrade));
-			fields[32].setValue(converter.toString(avgPoints));
-			converter.getDecimalFormat().setRoundingMode(RoundingMode.HALF_UP);
+			fields[32].setValue(converter.toString(avgGradePoints));
+		}
+		BigDecimal criticalGradesRatio = test.getCriticalGradesRatioRespectingDate();
+		converter.getDecimalFormat().setRoundingMode(RoundingMode.HALF_UP);
+		if (criticalGradesRatio != null) {
 			// six spaces needed since field is too large
-			fields[33].setValue(
-					converter.toString(BigDecimal.valueOf(100 * (grades[0] + grades[1] + grades[2] + grades[3]))
-							.divide(amountBigDecimal, 7, RoundingMode.HALF_UP)) + "      ");
+			fields[33].setValue(converter.toString(criticalGradesRatio.multiply(BigDecimal.valueOf(100))) + "      ");
 		}
 
 	}
