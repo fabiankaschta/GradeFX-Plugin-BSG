@@ -16,6 +16,7 @@ public class BSGPlugin extends Plugin {
 
 	@Override
 	public void start() {
+		LogController.log(LogController.DEBUG, "bsg plugin started");
 		PropertiesController.addProperties(
 				BSGPlugin.class.getResourceAsStream("/org/openjfx/gradefx/plugin/bsg/bsg-plugin.properties"));
 		UpdateController.register("bsg-plugin", () -> PropertiesController.getProperty("bsg-plugin.version"),

@@ -195,7 +195,7 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 				}
 				annotationBuilder.append('\n');
 			}
-			if (!test.getOnlyDefaultDate() || date == null || date.equals(test.getDate())) {
+			if (!test.isOnlyDefaultDate() || date == null || date.equals(test.getDate())) {
 				Grade grade = test.getGrade(student);
 				if (grade != null) {
 					amount++;
@@ -218,17 +218,19 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 		fields[19].setValue(String.valueOf(grades[3]));
 		fields[20].setValue(String.valueOf(grades[4]));
 		fields[21].setValue(String.valueOf(grades[5]));
-		BigDecimal amountBigDecimal = BigDecimal.valueOf(amount);
-		BigDecimal sumBigDecimal = BigDecimal
-				.valueOf(grades[0] * 1 + grades[1] * 2 + grades[2] * 3 + grades[3] * 4 + grades[4] * 5 + grades[5] * 6);
-		BigDecimalConverter converter = new BigDecimalConverter();
-		converter.getDecimalFormat().setMinimumFractionDigits(2);
-		converter.getDecimalFormat().setMaximumFractionDigits(2);
-		converter.getDecimalFormat().setRoundingMode(RoundingMode.DOWN);
-		fields[22].setValue(converter.toString(sumBigDecimal.divide(amountBigDecimal, 7, RoundingMode.DOWN)));
-		converter.getDecimalFormat().setRoundingMode(RoundingMode.HALF_UP);
-		fields[23].setValue(converter.toString(
-				BigDecimal.valueOf(100 * (grades[4] + grades[5])).divide(amountBigDecimal, 7, RoundingMode.HALF_UP)));
+		if (amount != 0) {
+			BigDecimal amountBigDecimal = BigDecimal.valueOf(amount);
+			BigDecimal sumBigDecimal = BigDecimal
+					.valueOf(grades[0] * 1 + grades[1] * 2 + grades[2] * 3 + grades[3] * 4 + grades[4] * 5 + grades[5] * 6);
+			BigDecimalConverter converter = new BigDecimalConverter();
+			converter.getDecimalFormat().setMinimumFractionDigits(2);
+			converter.getDecimalFormat().setMaximumFractionDigits(2);
+			converter.getDecimalFormat().setRoundingMode(RoundingMode.DOWN);
+			fields[22].setValue(converter.toString(sumBigDecimal.divide(amountBigDecimal, 7, RoundingMode.DOWN)));
+			converter.getDecimalFormat().setRoundingMode(RoundingMode.HALF_UP);
+			fields[23].setValue(converter.toString(
+					BigDecimal.valueOf(100 * (grades[4] + grades[5])).divide(amountBigDecimal, 7, RoundingMode.HALF_UP)));
+		}
 
 		final String fullPattern = "SA/KA/Stgr.A/Test/Andere";
 		String pattern;
@@ -341,7 +343,7 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 		BigDecimal sumBigDecimal = BigDecimal.ZERO;
 		for (Student student : group.getStudents()) {
 			LocalDate date = test.getDate(student);
-			if (!test.getOnlyDefaultDate() || date == null || date.equals(test.getDate())) {
+			if (!test.isOnlyDefaultDate() || date == null || date.equals(test.getDate())) {
 				Grade grade = test.getGrade(student);
 				if (grade != null) {
 					amount++;
@@ -355,21 +357,24 @@ public class TestMenuExtensionBSG implements TestMenuExtensionPoint {
 		}
 		fields[13].setValue(String.valueOf(amount));
 		fields[30].setValue(String.valueOf(amount));
-		BigDecimal amountBigDecimal = BigDecimal.valueOf(amount);
+		if (amount != 0) {
+			BigDecimal amountBigDecimal = BigDecimal.valueOf(amount);
 
-		BigDecimalConverter converter = new BigDecimalConverter();
-		converter.getDecimalFormat().setMinimumFractionDigits(2);
-		converter.getDecimalFormat().setMaximumFractionDigits(2);
-		converter.getDecimalFormat().setRoundingMode(RoundingMode.DOWN);
-		BigDecimal avgPoints = sumBigDecimal.divide(amountBigDecimal, 7, RoundingMode.DOWN);
-		BigDecimal avgGrade = BigDecimal.valueOf(17).subtract(avgPoints).divide(BigDecimal.valueOf(3), 7,
-				RoundingMode.DOWN);
-		fields[31].setValue(converter.toString(avgGrade));
-		fields[32].setValue(converter.toString(avgPoints));
-		converter.getDecimalFormat().setRoundingMode(RoundingMode.HALF_UP);
-		// six spaces needed since field is too large
-		fields[33].setValue(converter.toString(BigDecimal.valueOf(100 * (grades[0] + grades[1] + grades[2] + grades[3]))
-				.divide(amountBigDecimal, 7, RoundingMode.HALF_UP)) + "      ");
+			BigDecimalConverter converter = new BigDecimalConverter();
+			converter.getDecimalFormat().setMinimumFractionDigits(2);
+			converter.getDecimalFormat().setMaximumFractionDigits(2);
+			converter.getDecimalFormat().setRoundingMode(RoundingMode.DOWN);
+			BigDecimal avgPoints = sumBigDecimal.divide(amountBigDecimal, 7, RoundingMode.DOWN);
+			BigDecimal avgGrade = BigDecimal.valueOf(17).subtract(avgPoints).divide(BigDecimal.valueOf(3), 7,
+					RoundingMode.DOWN);
+			fields[31].setValue(converter.toString(avgGrade));
+			fields[32].setValue(converter.toString(avgPoints));
+			converter.getDecimalFormat().setRoundingMode(RoundingMode.HALF_UP);
+			// six spaces needed since field is too large
+			fields[33].setValue(
+					converter.toString(BigDecimal.valueOf(100 * (grades[0] + grades[1] + grades[2] + grades[3]))
+							.divide(amountBigDecimal, 7, RoundingMode.HALF_UP)) + "      ");
+		}
 
 	}
 
