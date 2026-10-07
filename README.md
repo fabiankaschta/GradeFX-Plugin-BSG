@@ -5,4 +5,7 @@ Plugin für das Programm [GradeFX](https://github.com/fabiankaschta/GradeFX) fü
 Dieses Plugin erlaubt das automatische Ausfüllen von Schulaufgabenumschlägen.
 
 ## Download
-Unter [Release](https://github.com/fabiankaschta/GradeFX-Plugin-BSG/releases/latest) findet sich die aktuelle Version des Plugins (unabhängig vom Betriebssystem). Nach dem Herunterladen ins Installations-Verzeichnis von GradeFX in den Ordner "plugins" kopieren. Falls der Ordner nicht vorhanden ist, kann er einfach erstellt werden.
+Unter [Release](https://github.com/fabiankaschta/GradeFX-Plugin-BSG/releases/latest) findet sich die aktuelle Version des Plugins (unabhängig vom Betriebssystem). Nach dem Herunterladen in den "plugins"-Ordner im Homeverzeichnis des Benutzers kopieren:
+* Windows: C:\Users\\\<Benutzername\>\\.gradefx\plugins
+* Linux/MacOS: ~/.gradefx/plugins
+Die Ornder ggfs. erstellen, falls sie nicht vorhanden sind. Anschließend GradeFX schließen und neu öffnen.
